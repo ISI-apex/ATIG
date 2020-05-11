@@ -1,1 +1,1 @@
-# ATIG
+# Dataflow Optimizer: CASPER Scheduler and Mapper

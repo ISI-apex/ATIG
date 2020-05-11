@@ -1,0 +1,17 @@
+﻿mesh_size,runtime,shape
+$2^{4}$,1.13578,Maximum
+$2^{5}$,4.52493,Maximum
+$2^{6}$,24.5097,Maximum
+$2^{7}$,137.984,Maximum
+$2^{4}$,0.5966,Average
+$2^{5}$,2.321,Average
+$2^{6}$,12.343,Average
+$2^{7}$,62.865,Average
+$2^{4}$,0.521478,Prediction
+$2^{5}$,1.33284,Prediction
+$2^{6}$,7.72067,Prediction
+$2^{7}$,39.4991,Prediction
+$2^{4}$,0.256597,Minimum
+$2^{5}$,1.32072,Minimum
+$2^{6}$,7.6359,Minimum
+$2^{7}$,37.6082,Minimum

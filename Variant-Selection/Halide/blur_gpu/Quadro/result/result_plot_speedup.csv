@@ -1,0 +1,13 @@
+﻿mesh_size,speedup,shape
+$2^{10}$,3605.25,Against Worst
+$2^{11}$,78.37,Against Worst
+$2^{12}$,61.05,Against Worst
+$2^{13}$,32.98,Against Worst
+$2^{14}$,12.08,Against Worst
+$2^{15}$,3.92,Against Worst
+$2^{10}$,274.84,Against Average
+$2^{11}$,7.29,Against Average
+$2^{12}$,4.44,Against Average
+$2^{13}$,3.50,Against Average
+$2^{14}$,1.48,Against Average
+$2^{15}$,1.16,Against Average

@@ -1,0 +1,9 @@
+# Apple
+.DS_Store
+
+# Python compiled bytecode
+*.pyc
+
+# Testing
+test.py
+testing.py
