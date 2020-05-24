@@ -1,5 +1,5 @@
 import numpy as np
-import cvxpy as cp
+import cvxpy as cp # use `pip install --pre --upgrade cvxpy` to get cvxpy-1.1
 from cvxpy.atoms.affine.reshape import reshape
 from cvxpy.atoms.affine.binary_operators import multiply
 
@@ -29,12 +29,12 @@ def ILP_form(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stagemat, Adj):
         for i in range(n):
             for j in range(m):
                 constraints.append(Tt[i,j] * stagemat[p,i] * x[i,j] + \
-                    stagemat[p,i] * (Adj[:,i].reshape(1,n) * x * Tc[:,j]) <= M[p])
+                    stagemat[p,i] * (Adj[:,i].reshape(1,n) @ x @ Tc[:,j]) <= M[p])
 
     # (3) resource constraints
     for p in range(P):
         for j in range(m):
-            constraints.append(stagemat[p] * multiply(reshape(x[:,j], (n,1)), C[:,j].reshape(n,1)) <= B[j])
+            constraints.append(stagemat[p] @ multiply(reshape(x[:,j], (n,1)), C[:,j].reshape(n,1)) <= B[j])
 
 
     # (5) assign tasks
@@ -46,10 +46,10 @@ def ILP_form(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stagemat, Adj):
     prob = cp.Problem(obj, constraints)
     val = prob.solve()
 
-    print('prob.solve:', val)
     print('T.value:', T.value)
     print('M.value:', M.value)
     print('x.value:\n', x.value)
+    print('T:', val)
 
     return x.value
 
@@ -79,12 +79,12 @@ def LP_relax(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stagemat, Adj, v
         for i in range(n):
             for j in range(m):
                 constraints.append(Tt[i,j] * stagemat[p,i] * xl[i,j] + \
-                    stagemat[p,i] * (Adj[:,i].reshape(1,n) * xl * Tc[:,j]) <= M[p])
+                    stagemat[p,i] * (Adj[:,i].reshape(1,n) @ xl @ Tc[:,j]) <= M[p])
 
     # (3) resource constraints
     for p in range(P):
         for j in range(m):
-            constraints.append(stagemat[p] * multiply(reshape(xl[:,j], (n,1)), C[:,j].reshape(n,1)) <= B[j])
+            constraints.append(stagemat[p] @ multiply(reshape(xl[:,j], (n,1)), C[:,j].reshape(n,1)) <= B[j])
 
     # (5) assign tasks
     for i in range(n):
@@ -109,6 +109,7 @@ def LP_relax(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stagemat, Adj, v
         print('T.value:', np.around(T.value, 3))
         print('M.value:', np.around(M.value, 3))
         print('xl.value:\n', np.around(xl.value, 3))
+        print('T:', val)
 
     return val, xl.value
 
@@ -127,7 +128,7 @@ def rand_round(x):
     return xi
 
 
-# -- Calculate ILP -- #
+# -- Calculate completion time. returns infinity if a constraint is violated -- #
 def ILP_calculate(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stagemat, Adj, x, verbose=0):
     # (5) assign tasks
     for i in range(n):
@@ -175,7 +176,7 @@ def ILP_calc_violations(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stage
     # (3) resource contraints
     for p in range(P):
         for j in range(m):
-            res = np.dot(stagemat[p], x[:,j].reshape((n,1)) * C[:,j].reshape(n,1))
+            res = np.dot( stagemat[p], x[:,j].reshape((n,1)) * C[:,j].reshape(n,1) )
             if (res > B[j]): num_violations += 1 #return float("inf")
 
 
@@ -199,4 +200,4 @@ def ILP_calc_violations(m, P, sinkresource, n, C, Ce, Cr, Tt, Tc, B, E, e, stage
     # total time
     if verbose == 1: print('T =', T[-1], 'for:\n', x, end='\n\n')
 
-    return  T[-1] * (1 + (2*num_violations))
+    return  T[-1] * (1 + (2*num_violations)), num_violations
