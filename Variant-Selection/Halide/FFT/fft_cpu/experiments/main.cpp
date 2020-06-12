@@ -269,8 +269,12 @@ int main(int argc, char **argv) {
                "r2c",
                halide_t
                );
-
-        ofile << halide_t << "," << W << "," << v1 << "," << v2 << "," << v3 << "," << v4 << "," << v5 << "," << v6 << "," << '\n'; // 1000 times
+        // define C
+        // for blur operation, C = n^2, where n is the input dimension
+        double cons = W*W;
+        // write to the output file
+        ofile << halide_t << "," << W << "," << v1 << "," << v2 << "," << v3 << "," << v4 << "," << v5 << "," << v6 << ",";// 1000 times
+        ofile << cons << "," << '\n';
     }
 
 /*

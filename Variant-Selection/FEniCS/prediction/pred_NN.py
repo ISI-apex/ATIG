@@ -5,23 +5,23 @@ from sklearn import preprocessing
 from scipy.stats import spearmanr
 import time
 
-FILENAME = "halide_R_blur_3x3_all_1000px5.csv"
+FILENAME = "out_log.csv"
 
 # ------------------Data-----------------------#
 data = np.array(pd.read_csv(FILENAME))
 
-# currently input data length is hardcoded
-train_data = data[:2000]
-test_data = data[2000:]
+# currently input data length is hardcoded:
+# 3000 for linearly generated dataset; 70 for logistically generated dataset
+train_data = data[:70]
+test_data = data[70:]
 
-# the fourth input is the augmented constant
-X_train = np.array(train_data[:, [1, 2, 3, 4, 5, 6]])
+X_train = np.array(train_data[:, [1, 2, 3]])
 y_train = np.array(train_data[:, [0]])
-X_test = np.array(test_data[:, [1, 2, 3, 4, 5, 6]])
+X_test = np.array(test_data[:, [1, 2, 3]])
 
 print(test_data.shape)
 
-x = tf.placeholder(tf.float32, [None, 6])
+x = tf.placeholder(tf.float32, [None, 3])
 y = tf.placeholder(tf.float32, [None, 1])  
 
 X_train = preprocessing.scale(X_train)  
@@ -31,14 +31,13 @@ print(X_test.shape)
 
 # ------------------Model----------------------#
 # hidden layer
-L1 = tf.layers.dense(x, 5, tf.nn.relu)
-L2 = tf.layers.dense(x, 5, tf.nn.relu)
+L1 = tf.layers.dense(x, 15, tf.nn.relu)
 # output layer
-prediction = tf.layers.dense(L2,1)
+prediction = tf.layers.dense(L1,1)
 # loss function: MSE
 loss = tf.reduce_mean(tf.square(y - prediction))
 # train step
-train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
+train_step = tf.train.AdamOptimizer(0.1).minimize(loss)
 # print out total parameters of the model: our model needs to be lightweight
 total_parameters = 0
 for variable in tf.trainable_variables():
@@ -100,12 +99,12 @@ with tf.Session() as sess:
         truth_value = test_data[:, [0]][i][0]
         abs_value = abs(prd[i][0] - test_data[:, [0]][i][0])
         # we focus on prediction accuracy for data instances with a relatively large execution time
-        # if the execution time > 0.1s
-        if truth_value > 0.1:
+        # if the execution time > 1s
+        if truth_value > 1:
             sum_MAPE_1 += (abs_value/truth_value)
             MAPE_1_length+=1
-        # if the execution time > 0.5s
-        if truth_value > 0.5:
+        # if the execution time > 5s
+        if truth_value > 5:
             sum_MAPE_5 += (abs_value / truth_value)
             MAPE_5_length+=1
 
@@ -117,8 +116,8 @@ with tf.Session() as sess:
     # summary
     print("MAE: ", sum_MAE / test_data.shape[0])
     print("MSE: ", sum_MSE / test_data.shape[0])
-    print("MAPE(>0.1s): ", sum_MAPE_1 / MAPE_1_length)
-    print("MAPE(>0.5s): ", sum_MAPE_5 / MAPE_5_length)
+    print("MAPE(>1s): ", sum_MAPE_1 / MAPE_1_length)
+    print("MAPE(>5s): ", sum_MAPE_5 / MAPE_5_length)
     # Spearman's rank correlation coefficient
     rho, pval = spearmanr(pred_list,test_list)
     print('rho:', rho)

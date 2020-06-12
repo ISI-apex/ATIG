@@ -1,0 +1,19 @@
+﻿input_size,runtime,shape,speedup
+$2^{10}$,0.0179506,Auto-scheduler,
+$2^{11}$,0.0217286,Auto-scheduler,
+$2^{12}$,0.0357478,Auto-scheduler,
+$2^{13}$,0.188834,Auto-scheduler,
+$2^{14}$,0.740178,Auto-scheduler,
+$2^{15}$,3.8,Auto-scheduler,
+$2^{10}$,0.0169542,Auto-shape Prediction,1.058770098
+$2^{11}$,0.0183616,Auto-shape Prediction,1.183371819
+$2^{12}$,0.032741,Auto-shape Prediction,1.091835924
+$2^{13}$,0.154846,Auto-shape Prediction,1.219495499
+$2^{14}$,0.55953,Auto-shape Prediction,1.322856683
+$2^{15}$,1.71299,Auto-shape Prediction,1.484587636
+$2^{10}$,0.0145348,Minimum,
+$2^{11}$,0.0170202,Minimum,
+$2^{12}$,0.029457,Minimum,
+$2^{13}$,0.124945,Minimum,
+$2^{14}$,0.435975,Minimum,
+$2^{15}$,1.47455,Minimum,

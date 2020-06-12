@@ -1,8 +1,6 @@
-// put this file in /Halide-master/tutorial
 // On linux, you can compile and run it like so:
 // g++ blur_cpu.cpp -g -std=c++11 -I ../include -L ../bin -lHalide -lpthread -ldl -o blur_cpu 
 // LD_LIBRARY_PATH=../bin ./blur_cpu
-
 
 #include "Halide.h"
 #include "clock.h"
@@ -17,21 +15,20 @@ using namespace Halide;
 
 
 int main(int argc, char **argv) {
-
-    std::string FILENAME = "halide_blur_cpu_Xeon_test.csv"; // CHANGE: the output file name
+    // subject to change: the output file name
+    std::string FILENAME = "halide_blur_cpu_Xeon_test.csv"; 
     std::ofstream ofile;
     ofile.open(FILENAME);
-
+    // how many data instances to generate
     int NUM = 1000;
-
+    // input size ranges from 2^10 to 2^15
     for (int k = 0; k <= 5; k++){ 
-
         int p_input = 10 + k;
-
         for (int i = 0; i < NUM; i++) {
 
             if (i % 10 == 0) std::cout << i << std::endl;
-        
+            
+            // Halide Blur operation
             Func blur_x, blur_y;
             Var x_, y_, xi, yi;
 
@@ -39,21 +36,19 @@ int main(int argc, char **argv) {
             input(x_,y_) = rand() % 1024 + 1;
             
             int power = 10;
+            // varying parameters/knobs
             int p1 = rand() % power + 1; 
             int p2 = rand() % power + 1; 
             int p3 = rand() % p2 + 1; // p2 > p3
             int p4 = rand() % p3 + 1; // p3 > p4
-
 
             int v1 = pow(2,p1);
             int v2 = pow(2,p2);
             int v3 = pow(2,p3);
             int v4 = pow(2,p4);
             
-
+            // write to the console
             std::cout << v1 << "," << v2 << "," << v3 << "," << v4 << std::endl;
-
-
 
             // The algorithm - no storage or order
             blur_x(x_, y_) = (input(x_-1, y_) + input(x_, y_) + input(x_+1, y_))/3;
@@ -69,7 +64,6 @@ int main(int argc, char **argv) {
             Var y_i("y_i");
             Var y_o("y_o");
 
-
             {
                 Var x = blur_x.args()[0];
                 blur_x
@@ -78,8 +72,6 @@ int main(int argc, char **argv) {
                     .vectorize(x_vi);
             }
             {
-
-            
                 Var x = blur_y.args()[0];
                 Var y = blur_y.args()[1];
                 blur_y
@@ -96,9 +88,9 @@ int main(int argc, char **argv) {
 
             double time = 0;
             int rounds = 5; 
-
+            // for each data instance, run 5 times and take the average
             for (int j = 0; j < rounds; j++){
-                
+                // run
                 double t1 = current_time();
                 blur_y.realize(pow(2,p_input),pow(2,p_input)); 
                 double t2 = current_time();
@@ -107,10 +99,13 @@ int main(int argc, char **argv) {
             }
 
             double avgtime = time/rounds; 
-
             std::cout << avgtime << std::endl;
-
-            ofile << avgtime << "," << pow(2,p_input) << "," << v1 << "," << v2 << "," << v3 << "," << v4 << "," << '\n';
+            // define C
+            // for blur operation, C = n^2, where n is the input dimension
+            double cons = pow(2,p_input)*pow(2,p_input);
+            // write to the output file
+            ofile << avgtime << "," << pow(2,p_input) << "," << v1 << "," << v2 << "," << v3 << "," << v4 << ",";
+            ofile << cons << "," << '\n';
         }
     }
 
