@@ -31,5 +31,16 @@ for performance prediction models:
 * scikit-learn >= 0.22.2
 * scipy >= 0.16.0
 
+## Evaluation
+
+When performance prediction models finish testing, a few metrics will be generated:
+
+* MAE: mean absolute error
+* MSE: mean squared error
+* MAPE(>*x* s): mean absolute percentage error, restricting to data instances whose runtime is greater than *x* seconds
+
+*Note: The reason to exclude data instances with small runtime is that sometimes MAPE gets extremely large (>1000%) when the actual runtime is small. In addition, we care more about tasks with a large runtime in the scheduling process.*
+
+* rho: Spearman's rank correlation coefficient (or Spearman's rho), which indicates if a higher ranked candidate through prediction also has a higher ranked true runtime. In short, how well does our model tell about the order of runtimes.
 
 
