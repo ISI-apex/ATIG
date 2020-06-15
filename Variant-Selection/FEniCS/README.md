@@ -28,11 +28,11 @@ for np in {17..32..1}; do for th in {1..32..1}; do sh -c "export OMP_NUM_THREADS
 
 3. run
 ```
-python data.py
+python parse.py
 ```
 to parse the data from `result.csv` into `out.csv`.
 
-4. put the generated `out.csv` file in the corresponding `prediction_for_*` file. For training purpose, entries in `out.csv` should be manually reordered.
+4. put the generated `out.csv` file in the corresponding `prediction_for_*` file.
 
 **Since the virtual machine environment is not provided here, dataset generated on our server (*Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz*) are included in `prediction_for_*` as `out.csv`.**
 

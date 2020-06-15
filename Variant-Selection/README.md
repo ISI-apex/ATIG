@@ -18,7 +18,7 @@ In `Halide`:
 * `Blur` contains code for Halide Blur function on CPU and GPU
 * `FFT` contains code for Halide FFT implementation on CPU and GPU
 
-Details about running code are described in README.md within each folder.
+Details about running code are described in README.md within each folder. Please be consistent with input/output filenames.
 
 ## Dependencies
 
