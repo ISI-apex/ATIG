@@ -1,7 +1,7 @@
 Within each file:
 
 1. generate the dataset using the code in `experiments`. Instuctions for compling and running are included in the top of `.cpp` files.
-2. put the generated `.csv` file in `prediction`.
+2. put the generated `.csv` file in `prediction`. For training purpose, entries in `.csv` should be manually reordered.
 3. run the performance prediction model with 
 ```
 python pred_*.py
