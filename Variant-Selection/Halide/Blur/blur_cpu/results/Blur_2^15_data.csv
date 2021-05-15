@@ -1,8 +1,0 @@
-runtime,schedule,shape
-3.8,auto-scheduler,Auto-scheduler
-6.6,auto_cs_average,Auto schedule shape
-2.63,auto_cs_min,Auto schedule shape
-2.89,auto_cs_pred,Auto schedule shape
-2.44,man_cs_average,Manual schedule shape
-1.8,man_cs_min,Manual schedule shape
-1.85,man_cs_pred,Manual schedule shape
