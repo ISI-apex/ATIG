@@ -5,6 +5,8 @@ This repo contains code for the CASPER project. Specifically, included are pytho
 - `ATIG_generation.py`: contains functions used to generate a random or toy graph.
 - `ILP_algorithms.py`: contains ILP form and LP relax algorithms, as well as some helper functions to determine constraint violations.
 - `monte_carlo_tree_search.py`: MCTS script, modified from [this GitHub Gist](https://gist.github.com/qpwo/c538c6f73727e254fdc7fab81024f6e1).
+- `mcts.py`: contains updated version of the MCTS based algorithm.
+- `mcts_algorithms.py`: MCTS script of the Pick-Best-Pair Running Best algorithm.
 - `mcts_atig.ipynb`: MAIN FILE. Jupyter notebook that defines the ATIG object and the primary function which uses the MCTS algorithm to generate the task graph. Test graphs
 
 # Instructions
